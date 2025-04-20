@@ -12,6 +12,13 @@ interface AQIComparisonProps {
 }
 
 const AQIComparison = ({ locations, isLoading }: AQIComparisonProps) => {
+  const getAQIBackgroundColor = (aqi: number) => {
+    if (aqi <= 50) return 'bg-[#78C35D]'; // Good
+    if (aqi <= 100) return 'bg-[#FEF7CD] text-gray-800'; // Moderate
+    if (aqi <= 150) return 'bg-[#FEC6A1] text-gray-800'; // Unhealthy
+    return 'bg-[#ea384c]'; // Very Unhealthy
+  };
+
   if (isLoading) {
     return (
       <Card className="animate-fade-in">
@@ -44,10 +51,12 @@ const AQIComparison = ({ locations, isLoading }: AQIComparisonProps) => {
               <div className="flex items-center space-x-4">
                 <div
                   className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                    location.data ? getAQIColorClass(location.data.aqi) : 'bg-gray-200'
-                  }`}
+                    location.data 
+                      ? getAQIBackgroundColor(location.data.aqi)
+                      : 'bg-gray-200'
+                  } text-white`}
                 >
-                  <span className="text-lg font-bold text-white">
+                  <span className="text-lg font-bold">
                     {location.data?.aqi || '-'}
                   </span>
                 </div>
