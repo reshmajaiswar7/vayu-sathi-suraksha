@@ -1,6 +1,5 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertCircle } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { AQIRecommendation } from "@/types/airQuality";
 import { getRecommendations } from "@/utils/aqiUtils";
 
@@ -15,7 +14,7 @@ const Recommendations = ({ aqi }: RecommendationsProps) => {
     <Card className="animate-fade-in">
       <CardHeader className="bg-softgreen">
         <div className="flex items-center">
-          <Alert className="h-5 w-5 mr-2 text-green-700" />
+          <AlertCircle className="h-5 w-5 mr-2 text-green-700" />
           <CardTitle className="text-xl font-semibold text-green-800">Health Recommendations</CardTitle>
         </div>
         <CardDescription>
