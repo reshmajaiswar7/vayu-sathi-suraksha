@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import AQICard from "@/components/AQICard";
@@ -26,22 +27,28 @@ const Index = () => {
     setIsHistoricalLoading(true);
     
     try {
+      // Fetch current air quality data
       const aqData = await getCurrentAirQuality(selectedLocation);
       setAirQualityData(aqData);
+      setIsLoading(false); // Set loading to false after data is fetched
       
+      // Fetch comparison location data
       const otherLocation = selectedLocation.includes("Mumbai") ? "Odisha" : "Mumbai";
       const otherData = await getCurrentAirQuality(otherLocation);
       setOdishaAQData(otherData);
       
+      // Fetch forecast data
       const forecast = await getAirQualityForecast(selectedLocation);
       setForecastData(forecast);
       setIsForecastLoading(false);
       
+      // Fetch historical data
       const historical = await getHistoricalAirQuality(selectedLocation);
       setHistoricalData(historical);
       setIsHistoricalLoading(false);
     } catch (error) {
       console.error("Error fetching air quality data:", error);
+      // Set all loading states to false even if there's an error
       setIsLoading(false);
       setIsForecastLoading(false);
       setIsHistoricalLoading(false);

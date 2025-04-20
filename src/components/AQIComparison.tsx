@@ -2,6 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAQIColorClass, getAQILevel } from "@/utils/aqiUtils";
 import { AirQualityData } from "@/types/airQuality";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface AQIComparisonProps {
   locations: {
@@ -22,14 +23,23 @@ const AQIComparison = ({ locations, isLoading }: AQIComparisonProps) => {
   if (isLoading) {
     return (
       <Card className="animate-fade-in">
+        <CardHeader>
+          <CardTitle className="text-xl">AQI Comparison</CardTitle>
+        </CardHeader>
         <CardContent className="p-6">
-          <div className="animate-pulse space-y-4">
-            <div className="h-4 w-1/4 bg-gray-200 rounded"></div>
-            <div className="space-y-3">
-              {[1, 2].map((i) => (
-                <div key={i} className="h-12 bg-gray-100 rounded"></div>
-              ))}
-            </div>
+          <div className="space-y-4">
+            {[1, 2].map((i) => (
+              <div key={i} className="flex items-center justify-between p-4 rounded-lg border">
+                <div className="flex items-center space-x-4">
+                  <Skeleton className="w-12 h-12 rounded-full" />
+                  <div>
+                    <Skeleton className="h-4 w-24 mb-2" />
+                    <Skeleton className="h-3 w-16" />
+                  </div>
+                </div>
+                <Skeleton className="h-3 w-28" />
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
