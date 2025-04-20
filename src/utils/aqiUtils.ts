@@ -1,4 +1,3 @@
-
 import { AQILevel, AQIRecommendation } from "@/types/airQuality";
 
 // Determine AQI level based on AQI value
@@ -56,8 +55,10 @@ export function getRecommendations(aqi: number): AQIRecommendation {
 
 // Get color class based on AQI level
 export function getAQIColorClass(aqi: number): string {
-  const level = getAQILevel(aqi);
-  return `aqi-indicator-${level}`;
+  if (aqi <= 50) return 'bg-[#78C35D] text-white'; // Good
+  if (aqi <= 100) return 'bg-[#FEF7CD] text-gray-800'; // Moderate
+  if (aqi <= 150) return 'bg-[#FEC6A1] text-gray-800'; // Unhealthy
+  return 'bg-[#ea384c] text-white'; // Very Unhealthy
 }
 
 // Get formatted AQI text with interpretation

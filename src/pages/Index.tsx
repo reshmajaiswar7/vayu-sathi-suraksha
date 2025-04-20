@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import AQICard from "@/components/AQICard";
@@ -7,7 +6,6 @@ import Recommendations from "@/components/Recommendations";
 import Chatbot from "@/components/Chatbot";
 import AirQualityChart from "@/components/AirQualityChart";
 import AQIForecast from "@/components/AQIForecast";
-import AQIComparison from "@/components/AQIComparison";
 import { AirQualityData, AirQualityForecast, HistoricalAirQuality } from "@/types/airQuality";
 import { getCurrentAirQuality, getAirQualityForecast, getHistoricalAirQuality } from "@/services/airQualityService";
 
@@ -19,7 +17,6 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isForecastLoading, setIsForecastLoading] = useState<boolean>(true);
   const [isHistoricalLoading, setIsHistoricalLoading] = useState<boolean>(true);
-  const [odishaAQData, setOdishaAQData] = useState<AirQualityData | null>(null);
 
   const fetchData = async (selectedLocation: string) => {
     setIsLoading(true);
@@ -30,12 +27,7 @@ const Index = () => {
       // Fetch current air quality data
       const aqData = await getCurrentAirQuality(selectedLocation);
       setAirQualityData(aqData);
-      setIsLoading(false); // Set loading to false after data is fetched
-      
-      // Fetch comparison location data
-      const otherLocation = selectedLocation.includes("Mumbai") ? "Odisha" : "Mumbai";
-      const otherData = await getCurrentAirQuality(otherLocation);
-      setOdishaAQData(otherData);
+      setIsLoading(false);
       
       // Fetch forecast data
       const forecast = await getAirQualityForecast(selectedLocation);
@@ -48,7 +40,6 @@ const Index = () => {
       setIsHistoricalLoading(false);
     } catch (error) {
       console.error("Error fetching air quality data:", error);
-      // Set all loading states to false even if there's an error
       setIsLoading(false);
       setIsForecastLoading(false);
       setIsHistoricalLoading(false);
@@ -94,16 +85,6 @@ const Index = () => {
               <div className="md:col-span-2">
                 <Recommendations aqi={airQualityData.aqi} />
               </div>
-            </div>
-            
-            <div className="mb-6">
-              <AQIComparison
-                locations={[
-                  { name: "Mumbai", data: location.includes("Mumbai") ? airQualityData : odishaAQData },
-                  { name: "Odisha", data: location.includes("Odisha") ? airQualityData : odishaAQData }
-                ]}
-                isLoading={isLoading}
-              />
             </div>
             
             <div className="mb-6">
