@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -57,29 +56,13 @@ const AirQualityChart = ({ historicalData, isLoading }: AirQualityChartProps) =>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <CardTitle className="text-xl">Air Quality Trends</CardTitle>
           <div className="flex">
-            <TabsList>
-              <TabsTrigger 
-                value="7days" 
-                onClick={() => setTimeRange("7days")}
-                className={timeRange === "7days" ? "bg-primary text-white" : ""}
-              >
-                7 Days
-              </TabsTrigger>
-              <TabsTrigger 
-                value="14days" 
-                onClick={() => setTimeRange("14days")}
-                className={timeRange === "14days" ? "bg-primary text-white" : ""}
-              >
-                14 Days
-              </TabsTrigger>
-              <TabsTrigger 
-                value="30days" 
-                onClick={() => setTimeRange("30days")}
-                className={timeRange === "30days" ? "bg-primary text-white" : ""}
-              >
-                30 Days
-              </TabsTrigger>
-            </TabsList>
+            <Tabs value={timeRange} onValueChange={(value) => setTimeRange(value as "7days" | "14days" | "30days")}>
+              <TabsList>
+                <TabsTrigger value="7days">7 Days</TabsTrigger>
+                <TabsTrigger value="14days">14 Days</TabsTrigger>
+                <TabsTrigger value="30days">30 Days</TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
         </div>
       </CardHeader>
