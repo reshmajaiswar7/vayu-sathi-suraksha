@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import AQICard from "@/components/AQICard";
@@ -7,6 +6,7 @@ import Recommendations from "@/components/Recommendations";
 import Chatbot from "@/components/Chatbot";
 import AirQualityChart from "@/components/AirQualityChart";
 import AQIForecast from "@/components/AQIForecast";
+import AQIComparison from "@/components/AQIComparison";
 import { AirQualityData, AirQualityForecast, HistoricalAirQuality } from "@/types/airQuality";
 import { getCurrentAirQuality, getAirQualityForecast, getHistoricalAirQuality } from "@/services/airQualityService";
 
@@ -18,6 +18,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isForecastLoading, setIsForecastLoading] = useState<boolean>(true);
   const [isHistoricalLoading, setIsHistoricalLoading] = useState<boolean>(true);
+  const [odishaAQData, setOdishaAQData] = useState<AirQualityData | null>(null);
 
   const fetchData = async (selectedLocation: string) => {
     setIsLoading(true);
@@ -27,14 +28,15 @@ const Index = () => {
     try {
       const aqData = await getCurrentAirQuality(selectedLocation);
       setAirQualityData(aqData);
-      setIsLoading(false);
       
-      // Fetch forecast data
+      const otherLocation = selectedLocation.includes("Mumbai") ? "Odisha" : "Mumbai";
+      const otherData = await getCurrentAirQuality(otherLocation);
+      setOdishaAQData(otherData);
+      
       const forecast = await getAirQualityForecast(selectedLocation);
       setForecastData(forecast);
       setIsForecastLoading(false);
       
-      // Fetch historical data
       const historical = await getHistoricalAirQuality(selectedLocation);
       setHistoricalData(historical);
       setIsHistoricalLoading(false);
@@ -49,7 +51,6 @@ const Index = () => {
   useEffect(() => {
     fetchData(location);
     
-    // Set up automatic refresh every 15 minutes
     const refreshInterval = setInterval(() => {
       fetchData(location);
     }, 15 * 60 * 1000);
@@ -86,6 +87,16 @@ const Index = () => {
               <div className="md:col-span-2">
                 <Recommendations aqi={airQualityData.aqi} />
               </div>
+            </div>
+            
+            <div className="mb-6">
+              <AQIComparison
+                locations={[
+                  { name: "Mumbai", data: location.includes("Mumbai") ? airQualityData : odishaAQData },
+                  { name: "Odisha", data: location.includes("Odisha") ? airQualityData : odishaAQData }
+                ]}
+                isLoading={isLoading}
+              />
             </div>
             
             <div className="mb-6">
